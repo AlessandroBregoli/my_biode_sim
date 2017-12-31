@@ -7,5 +7,6 @@
     #include <sbml/math/ASTTypes.h>
     #include "gnuplot-iostream.h"
     #include "Stepper.h"
-#include <sbml/common/extern.h>
+    #include <sbml/common/extern.h>
+    #include <fstream>
 #endif

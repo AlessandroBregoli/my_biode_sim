@@ -21,3 +21,23 @@ void species_plot(Stepper &s){
     }
     gp<<"\n";
 }
+
+void species_csv(Stepper &s, std::string file_name){
+    std::ofstream csv;
+    csv.open(file_name);
+    csv<<"time";
+    for(int i = 0; i < s.get_model()->getNumSpecies(); i++)
+        csv<<","<<s.get_model()->getSpecies(i)->getName();
+
+    csv<<std::endl;
+    
+    for(int i = 0; i < s.get_actual_step(); i++){
+        csv<<s.get_time_step()[i];
+        for(int j = 0; j < s.get_model()->getNumSpecies(); j++){
+            csv<<","<< s.get_steps()[i][s.get_model()->getSpecies(j)->getId()];
+        }
+        csv<<std::endl;
+    }
+    csv.close();
+
+}
