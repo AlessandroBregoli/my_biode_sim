@@ -7,14 +7,21 @@ class Stepper{
         double h;
         int actual_step;
         std::vector<std::map<std::string, double> > steps;
+        std::vector<double> time_step;
         const Model* model;
     public:
         //Bio_ode_system ode_system;
-        virtual void step(){return;};
+        void step();
+        void init_step();
+        void finalize_step();
+        const Model* get_model(){return model;}
+        virtual void do_step(){return;};
         Stepper(const Model*);
         std::vector<std::map<std::string, double> > get_steps(){return steps;}
+        std::vector<double> get_time_step(){return time_step;}
         double evaluate(const ASTNode *n);
         void derivs( std::map<std::string,double> &result);
+        int get_actual_step(){return actual_step;}
 
 };
 

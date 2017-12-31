@@ -2,6 +2,6 @@
 
 class Euler_stepper: public Stepper{
     public:
-        void step();
+        void do_step();
         Euler_stepper(const Model* m, double hh);
 };

@@ -3,6 +3,7 @@
 Stepper::Stepper(const Model* m):model(m){
     actual_step = 0;
     steps.resize(5);
+    time_step.resize(5);
     for(int i= 0; i < model->getNumParameters(); i++){
         const Parameter* p = model->getParameter(i);
         steps[0][p->getId()] = p->getValue();
@@ -57,4 +58,23 @@ void Stepper::derivs( std::map<std::string,double> &result){
                 result[r->getProduct(j)->getSpecies()] += reaction_val*r->getProduct(j)->getStoichiometry();
             }
         }
+}
+
+void Stepper::init_step(){
+        if(steps.size()  == actual_step + 1)
+            steps.resize(actual_step*2);
+        if(time_step.size()  == actual_step + 1)
+            time_step.resize(actual_step*2);
+}
+
+void Stepper::finalize_step(){
+    actual_step++;
+    time_step[actual_step] = time_step[actual_step-1] + h;
+
+}
+
+void Stepper::step(){
+    init_step();
+    do_step();
+    finalize_step();
 }

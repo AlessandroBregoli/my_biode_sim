@@ -3,15 +3,9 @@
 #include "Ode_sym.h"
 #include "Euler_stepper.h"
 #include <cmath>
+#include <fstream>
+#include "gui.h"
 
-double derivata(double y){
-    
-    return 1-2*y;
-}
-
-double vera(double t){
-    return 1.0/2.0 * (1 - std::exp(0-2*t));
-}
 
 
 int main(){
@@ -22,11 +16,10 @@ int main(){
     model = doc->getModel();
     free(doc);
     Euler_stepper stepper(model,0.1);
-    for(int i = 0; i < 100; i++)
+    for(int i = 0; i < 5000; i++){
         stepper.step();
-    for(const auto &iter:stepper.get_steps()[100])
-        std::cout<<iter.first<<":"<<iter.second<<std::endl;
-
-    
+    }
+    std::cout<<"Inizio il disegno"<<std::endl;
+    species_plot(stepper);
     return 0;
 }
