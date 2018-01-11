@@ -19,7 +19,7 @@ int main(){
         stepper.step();
     }
     std::cout<<"Inizio il disegno"<<std::endl;
-    //species_plot(stepper);
+    species_plot(stepper);
     species_csv(stepper, "dati.csv");
     return 0;
 }
