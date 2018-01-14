@@ -5,6 +5,7 @@
 class Stepper{
     protected:
         double h;
+        double h_max;
         int actual_step;
         std::vector<std::map<std::string, double> > steps;
         std::vector<double> time_step;
@@ -19,7 +20,7 @@ class Stepper{
         void finalize_step();
         const Model* get_model(){return model;}
         virtual void do_step(std::map<std::string, double> in,std::map<std::string, double> &out, double h){return;};
-        Stepper(const Model*, double atol, double rtol);
+        Stepper(const Model*, double h, double atol, double rtol);
         std::vector<std::map<std::string, double> > get_steps(){return steps;}
         std::vector<double> get_time_step(){return time_step;}
         double evaluate(const ASTNode *n, std::map<std::string, double> state);

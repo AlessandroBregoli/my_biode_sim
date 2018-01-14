@@ -1,8 +1,10 @@
 #include "Stepper.h"
 #include "imports.h"
-Stepper::Stepper(const Model* m, double atol, double rtol):model(m){
+Stepper::Stepper(const Model* m, double h, double atol, double rtol):model(m){
     this->atol = atol;
     this->rtol = rtol;
+    this->h = h;
+    this->h_max = h;
     actual_step = 0;
     steps.resize(5);
     time_step.resize(5);
@@ -102,4 +104,6 @@ void Stepper::step(){
     }
     finalize_step();
     h = h*std::pow(1/err,1/k_error);
+    if(h > h_max)
+        h = h_max;
 }

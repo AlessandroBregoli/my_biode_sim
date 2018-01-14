@@ -9,7 +9,6 @@ void Euler_stepper::do_step(std::map<std::string, double> in ,std::map<std::stri
     }
 }
 
-Euler_stepper::Euler_stepper(const Model* m, double hh, double atol, double rtol):Stepper(m,atol,rtol){
-    this->h = hh;
+Euler_stepper::Euler_stepper(const Model* m, double h, double atol, double rtol):Stepper(m,h,atol,rtol){
     this->k_error = 1;
 }
