@@ -2,6 +2,6 @@
 
 class Euler_stepper: public Stepper{
     public:
-       void do_step(std::map<std::string, double>,std::map<std::string, double>&);
-        Euler_stepper(const Model* m, double hh);
+       void do_step(std::map<std::string, double>,std::map<std::string, double>&, double h);
+        Euler_stepper(const Model* m, double hh, double atol, double rtol);
 };

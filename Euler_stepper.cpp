@@ -1,7 +1,7 @@
 #include "Euler_stepper.h"
 #include "imports.h"
 #include <map>
-void Euler_stepper::do_step(std::map<std::string, double> in ,std::map<std::string, double> &out){
+void Euler_stepper::do_step(std::map<std::string, double> in ,std::map<std::string, double> &out, double h){
     std::map<std::string, double> deriv;
     derivs(deriv, in);
     for(const auto &iter: deriv){
@@ -9,6 +9,7 @@ void Euler_stepper::do_step(std::map<std::string, double> in ,std::map<std::stri
     }
 }
 
-Euler_stepper::Euler_stepper(const Model* m, double hh):Stepper(m){
+Euler_stepper::Euler_stepper(const Model* m, double hh, double atol, double rtol):Stepper(m,atol,rtol){
     this->h = hh;
+    this->k_error = 1;
 }

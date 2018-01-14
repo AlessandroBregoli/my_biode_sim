@@ -1,6 +1,8 @@
 #include "Stepper.h"
 #include "imports.h"
-Stepper::Stepper(const Model* m):model(m){
+Stepper::Stepper(const Model* m, double atol, double rtol):model(m){
+    this->atol = atol;
+    this->rtol = rtol;
     actual_step = 0;
     steps.resize(5);
     time_step.resize(5);
@@ -75,10 +77,29 @@ void Stepper::finalize_step(){
 
 void Stepper::step(){
     init_step();
-    std::map<std::string, double> out;
-    do_step(steps[actual_step], out);
-    for(auto const& element: out){
+    std::map<std::string, double> out1, out2, out3;
+    double err;
+    do{
+        err=0;
+        do_step(steps[actual_step], out1, h);
+
+        do_step(steps[actual_step], out2,h/2);
+        do_step(out2, out3,h/2);
+
+        for(auto const& element: out1){
+            double scale = atol + std::abs(element.second)*rtol;
+            err += std::pow((out1[element.first]-out3[element.first])/scale,2);
+        }
+        err = std::sqrt(err/out1.size());
+        if(err > 1){
+            h = h*std::pow(1/err,1/k_error);  
+                    
+        }
+    }while(err > 1);
+
+    for(auto const& element: out1){
         steps[actual_step + 1][element.first] = element.second;
     }
     finalize_step();
+    h = h*std::pow(1/err,1/k_error);
 }

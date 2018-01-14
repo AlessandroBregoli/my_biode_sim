@@ -14,10 +14,10 @@ int main(){
     SBMLDocument *doc = reader.readSBML("repressilator.xml");
     model = doc->getModel();
     free(doc);
-    Euler_stepper stepper(model,0.1);
-    for(int i = 0; i < 1000; i++){
+    Euler_stepper stepper(model,0.1,0.01,0.001);
+    do{
         stepper.step();
-    }
+    }while(stepper.get_time_step()[stepper.get_actual_step()] < 100);
     std::cout<<"Inizio il disegno"<<std::endl;
     species_plot(stepper);
     species_csv(stepper, "dati.csv");
