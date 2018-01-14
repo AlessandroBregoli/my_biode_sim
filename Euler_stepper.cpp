@@ -1,11 +1,11 @@
 #include "Euler_stepper.h"
 #include "imports.h"
 #include <map>
-void Euler_stepper::do_step(){
+void Euler_stepper::do_step(std::map<std::string, double> in ,std::map<std::string, double> &out){
     std::map<std::string, double> deriv;
-    derivs(deriv);
+    derivs(deriv, in);
     for(const auto &iter: deriv){
-        steps[actual_step + 1][iter.first] = steps[actual_step][iter.first] +  h * iter.second;
+        out[iter.first] = in[iter.first] +  h * iter.second;
     }
 }
 

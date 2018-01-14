@@ -15,41 +15,41 @@ Stepper::Stepper(const Model* m):model(m){
     } 
     for(int i=0; i < model->getNumRules(); i++){
         const Rule* r = model->getRule(i);
-        steps[0][r->getVariable()] = evaluate(r->getMath());
+        steps[0][r->getVariable()] = evaluate(r->getMath(), steps[0]);
     }
 }
 
-double Stepper::evaluate(const ASTNode* n){
+double Stepper::evaluate(const ASTNode* n, std::map<std::string, double> state){
     switch(n->getType()){
         case AST_INTEGER:
         case AST_REAL:
             return n->getValue();
         case AST_NAME:
-            return steps[actual_step][n->getName()];
+            return state[n->getName()];
         case AST_PLUS:
-            return evaluate(n->getLeftChild()) + evaluate(n->getRightChild());
+            return evaluate(n->getLeftChild(), state) + evaluate(n->getRightChild(), state);
         case AST_MINUS:
-            return evaluate(n->getLeftChild()) - evaluate(n->getRightChild());
+            return evaluate(n->getLeftChild(), state) - evaluate(n->getRightChild(), state);
         case AST_TIMES:
-            return evaluate(n->getLeftChild()) * evaluate(n->getRightChild());
+            return evaluate(n->getLeftChild(), state) * evaluate(n->getRightChild(), state);
         case AST_DIVIDE:
-            return evaluate(n->getLeftChild()) / evaluate(n->getRightChild());
+            return evaluate(n->getLeftChild(), state) / evaluate(n->getRightChild(), state);
         case AST_FUNCTION_LN:
-            return std::log(evaluate(n->getLeftChild()));
+            return std::log(evaluate(n->getLeftChild(), state));
         case AST_FUNCTION_POWER:
-            return std::pow(evaluate(n->getLeftChild()) , evaluate(n->getRightChild()));
+            return std::pow(evaluate(n->getLeftChild(), state) , evaluate(n->getRightChild(), state));
         default:
             throw("Stronzata exception");
    }
     
 }
 
-void Stepper::derivs( std::map<std::string,double> &result){
-        for(auto const& element: steps[actual_step])
+void Stepper::derivs( std::map<std::string,double> &result, std::map<std::string, double> state){
+        for(auto const& element: state)
             result[element.first] = 0.0;
         for(int i = 0; i < model->getNumReactions(); i++){
             const Reaction *r = model->getReaction(i);
-            double reaction_val = evaluate(r->getKineticLaw()->getMath());
+            double reaction_val = evaluate(r->getKineticLaw()->getMath(), state);
             for(int j = 0; j < r->getNumReactants(); j++){
                 result[r->getReactant(j)->getSpecies()] -= reaction_val*r->getReactant(j)->getStoichiometry();
             }
@@ -75,6 +75,10 @@ void Stepper::finalize_step(){
 
 void Stepper::step(){
     init_step();
-    do_step();
+    std::map<std::string, double> out;
+    do_step(steps[actual_step], out);
+    for(auto const& element: out){
+        steps[actual_step + 1][element.first] = element.second;
+    }
     finalize_step();
 }

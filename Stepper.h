@@ -15,12 +15,12 @@ class Stepper{
         void init_step();
         void finalize_step();
         const Model* get_model(){return model;}
-        virtual void do_step(){return;};
+        virtual void do_step(std::map<std::string, double> in,std::map<std::string, double> &out){return;};
         Stepper(const Model*);
         std::vector<std::map<std::string, double> > get_steps(){return steps;}
         std::vector<double> get_time_step(){return time_step;}
-        double evaluate(const ASTNode *n);
-        void derivs( std::map<std::string,double> &result);
+        double evaluate(const ASTNode *n, std::map<std::string, double> state);
+        void derivs( std::map<std::string,double> &result, std::map<std::string, double> state);
         int get_actual_step(){return actual_step;}
 
 };
