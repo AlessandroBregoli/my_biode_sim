@@ -5,6 +5,8 @@ void species_plot(Stepper &s);
 
 void species_csv(Stepper &s, std::string file_name);
 
+void gui();
+
 
 
 
