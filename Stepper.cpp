@@ -23,6 +23,7 @@ Stepper::Stepper(const Model* m, double h, double atol, double rtol):model(m){
     }
 }
 
+//Non tutte le funzioni disponibili in AST sono state implementate ma solo le più comuni
 double Stepper::evaluate(const ASTNode* n, std::map<std::string, double> state){
     switch(n->getType()){
         case AST_INTEGER:
@@ -81,6 +82,8 @@ void Stepper::step(){
     init_step();
     std::map<std::string, double> out1, out2, out3;
     double err;
+    
+    //Questo ciclo serve per calcolare il passo ottimale
     do{
         err=0;
         do_step(steps[actual_step], out1, h);
