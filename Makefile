@@ -3,7 +3,11 @@ CXX=g++
 CXXFLAGS=-O3
 LDFLAGS=-lsbml -lboost_iostreams -lboost_system -lboost_filesystem
 all: main.o Stepper.o Euler_stepper.o RK4_stepper.o gui.o
-	$(CXX) $(LDFLAGS)  main.o Stepper.o Euler_stepper.o RK4_stepper.o gui.o -o $(APP)
+	$(CXX) $(LDFLAGS)  	main.o \
+						Stepper.o \
+						Euler_stepper.o \
+						RK4_stepper.o \
+						gui.o -o $(APP)
 
 main.o: main.cpp
 	$(CXX) $(CXXFLAGS) -c main.cpp

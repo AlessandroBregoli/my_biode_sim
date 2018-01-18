@@ -25,7 +25,6 @@ void species_plot(Stepper &s){
 }
 
 void species_csv(Stepper &s, std::string file_name){
-    std::cout<<"POTA"<<std::endl;
     std::ofstream csv;
     
     char buf[THRESHOLD];
@@ -77,7 +76,8 @@ void gui(){
         std::cout<<"Inserire il tempo di esecuzione: "<<std::flush;
         std::cin>>max_time;
         do{
-            std::cout<<"Inserire (E) per usare il metodo di Eulero o (R) per Runge-Kutta4"<<std::flush;
+            std::cout<<"Inserire (E) per usare il metodo di Eulero o " 
+                     <<"(R) per Runge-Kutta4: "<<std::flush;
             std::cin>>c;
         }while(c != 'e' && c != 'E' && c != 'r' && c != 'R');
         doc  = reader.readSBML(m);

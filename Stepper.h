@@ -29,13 +29,16 @@ class Stepper{
         void finalize_step();
 
         const Model* get_model(){return model;}
-        virtual void do_step(std::map<std::string, double> in,std::map<std::string, double> &out, double h){return;};
+        virtual void do_step(std::map<std::string, double> in,
+                                std::map<std::string, double> &out, double h)
+                                {return;};
         Stepper(const Model*, double h, double atol, double rtol);
         
         //Metodo per valutare Funzioni rappresentate da AST
         double evaluate(const ASTNode *n, std::map<std::string, double> state);
         //Metodo per calcolare le derivate
-        void derivs( std::map<std::string,double> &result, std::map<std::string, double> state);
+        void derivs(std::map<std::string,double> &result, 
+                        std::map<std::string, double> state);
         int get_actual_step(){return actual_step;}
 
 };

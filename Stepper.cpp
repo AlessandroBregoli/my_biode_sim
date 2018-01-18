@@ -23,7 +23,8 @@ Stepper::Stepper(const Model* m, double h, double atol, double rtol):model(m){
     }
 }
 
-//Non tutte le funzioni disponibili in AST sono state implementate ma solo le più comuni
+//Non tutte le funzioni disponibili in AST sono state 
+//implementate ma solo le più comuni
 double Stepper::evaluate(const ASTNode* n, std::map<std::string, double> state){
     switch(n->getType()){
         case AST_INTEGER:
@@ -32,35 +33,44 @@ double Stepper::evaluate(const ASTNode* n, std::map<std::string, double> state){
         case AST_NAME:
             return state[n->getName()];
         case AST_PLUS:
-            return evaluate(n->getLeftChild(), state) + evaluate(n->getRightChild(), state);
+            return  evaluate(n->getLeftChild(), state) + 
+                    evaluate(n->getRightChild(), state);
         case AST_MINUS:
-            return evaluate(n->getLeftChild(), state) - evaluate(n->getRightChild(), state);
+            return  evaluate(n->getLeftChild(), state) - 
+                    evaluate(n->getRightChild(), state);
         case AST_TIMES:
-            return evaluate(n->getLeftChild(), state) * evaluate(n->getRightChild(), state);
+            return  evaluate(n->getLeftChild(), state) * 
+                    evaluate(n->getRightChild(), state);
         case AST_DIVIDE:
-            return evaluate(n->getLeftChild(), state) / evaluate(n->getRightChild(), state);
+            return  evaluate(n->getLeftChild(), state) / 
+                    evaluate(n->getRightChild(), state);
         case AST_FUNCTION_LN:
             return std::log(evaluate(n->getLeftChild(), state));
         case AST_FUNCTION_POWER:
-            return std::pow(evaluate(n->getLeftChild(), state) , evaluate(n->getRightChild(), state));
+            return std::pow(evaluate(n->getLeftChild(), state) , 
+                            evaluate(n->getRightChild(), state));
         default:
             throw("Stronzata exception");
    }
     
 }
 
-void Stepper::derivs( std::map<std::string,double> &result, std::map<std::string, double> state){
+void Stepper::derivs( std::map<std::string,double> &result, 
+                        std::map<std::string, double> state){
         for(auto const& element: state)
             result[element.first] = 0.0;
         for(int i = 0; i < model->getNumReactions(); i++){
             const Reaction *r = model->getReaction(i);
-            double reaction_val = evaluate(r->getKineticLaw()->getMath(), state);
+            double reaction_val = evaluate(r->getKineticLaw()->getMath(), 
+                                           state);
             for(int j = 0; j < r->getNumReactants(); j++){
-                result[r->getReactant(j)->getSpecies()] -= reaction_val*r->getReactant(j)->getStoichiometry();
+                result[r->getReactant(j)->getSpecies()] -= 
+                    reaction_val*r->getReactant(j)->getStoichiometry();
             }
 
             for(int j = 0; j < r->getNumProducts(); j++){
-                result[r->getProduct(j)->getSpecies()] += reaction_val*r->getProduct(j)->getStoichiometry();
+                result[r->getProduct(j)->getSpecies()] += 
+                    reaction_val*r->getProduct(j)->getStoichiometry();
             }
         }
 }

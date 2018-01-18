@@ -32,11 +32,15 @@ void RK4_stepper::do_step(std::map<std::string, double> in ,std::map<std::string
     derivs(deriv,out);
     for(const auto &iter: deriv){
         k4[iter.first] =  h * iter.second;
-        out[iter.first] = in[iter.first] + 1.0/6.0*k1[iter.first] + b/3.0*k2[iter.first] + d/3.0*k3[iter.first]+1.0/6.0*k4[iter.first];
-        //out[iter.first] = in[iter.first] + k1[iter.first]/6.0 + k2[iter.first]/3.0 + k3[iter.first]/3.0+k4[iter.first]/6.0;
+        out[iter.first] = in[iter.first] + 
+                            1.0/6.0*k1[iter.first] + 
+                            b/3.0*k2[iter.first] + 
+                            d/3.0*k3[iter.first] +
+                            1.0/6.0*k4[iter.first];
     }
 }
 
-RK4_stepper::RK4_stepper(const Model* m, double h, double atol, double rtol):Stepper(m,h,atol,rtol){
+RK4_stepper::RK4_stepper(const Model* m, double h, double atol, double rtol)
+                            :Stepper(m,h,atol,rtol){
     this->k_error = 4;
 }
